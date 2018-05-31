@@ -1,0 +1,91 @@
+---
+title: "clusterlab"
+author: "Christopher R John"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+Clustering is a central task in big data analyses and clusters are often Gaussian or near Gaussian. However, a flexible Gaussian cluster simulation tool with precise control over the size, variance, and spacing of the clusters in NXN dimensional space does not exist. This is why we created clusterlab. The algorithm first creates X points equally spaced on the circumference of a circle in 2D space. These form the centers of each cluster to be simulated. Additional samples are added by adding Gaussian noise to each cluster center and concatenating the new sample co-ordinates. Then if the feature space is greater than 2D, the generated points are considered principal component scores and projected into N dimensional space using linear combinations using fixed eigenvectors. Clusterlab is highly customizable and well suited to testing class discovery tools across a range of fields.
+
+## Simulating a single cluster
+
+Here we simulate a 100 sample cluster with the default number of features (500). The standard deviation is left to default which is 1.
+
+```{r,fig.width=6,fig.height=6}
+library(clusterlab)
+synthetic <- clusterlab(centers=1,numbervec=100)
+```
+
+## Simulating four clusters with equal variances
+
+Next, we simulate a 4 cluster dataset with a radius of 8 for the circle on which the centers are placed. Then the standard deviations of the cluster are the same, 2.5. We set the alphas to 1, which is the value the clusters are pushed apart from one another. So there are two ways to seperate the clusters, either by the radius of the circle, or by the alpha parameter.
+
+```{r,fig.width=6,fig.height=6}
+library(clusterlab)
+synthetic <- clusterlab(centers=4,r=8,sdvec=c(2.5,2.5,2.5,2.5),   
+                        alphas=c(1,1,1,1),centralcluster=FALSE,   
+                        numbervec=c(50,50,50,50))
+```
+
+## Simulating four clusters with unequal variances
+
+The same as above, but 2 clusters have different variances to the other 2.
+
+```{r,fig.width=6,fig.height=6}
+library(clusterlab)
+synthetic <- clusterlab(centers=4,r=8,sdvec=c(1,1,2.5,2.5),   
+                        alphas=c(1,1,1,1),centralcluster=FALSE,   
+                        numbervec=c(50,50,50,50))
+```
+
+## Simulating four clusters with one cluster pushed to the outside
+
+The alpha parameter allows any number of clusters to be pushed away from the others. Here 1 cluster is pushed away slightly.
+
+```{r,fig.width=6,fig.height=6}
+library(clusterlab)
+synthetic <- clusterlab(centers=4,r=8,sdvec=c(2.5,2.5,2.5,2.5),   
+                        alphas=c(1,2,1,1),centralcluster=FALSE,   
+                        numbervec=c(50,50,50,50))
+```
+
+## Simulating four clusters with one small cluster
+
+Here we change the number vec entry for 1 cluster to a smaller value, therefore lowering the number of samples in the specified cluster.
+
+```{r,fig.width=6,fig.height=6}
+library(clusterlab)
+synthetic <- clusterlab(centers=4,r=8,sdvec=c(2.5,2.5,2.5,2.5),   
+                        alphas=c(1,1,1,1),centralcluster=FALSE,   
+                        numbervec=c(15,50,50,50))
+```
+
+## Simulated five clusters with one central cluster
+
+In this case we change the centralcluster parameter to TRUE, in order to make a central cluster as well as those placed on the circumference.
+
+```{r,fig.width=6,fig.height=6}
+library(clusterlab)
+synthetic <- clusterlab(centers=5,r=8,sdvec=c(2.5,2.5,2.5,2.5,2.5),   
+                        alphas=c(2,2,2,2,2),centralcluster=TRUE,   
+                        numbervec=c(50,50,50,50,50))
+```
+
+## Keeping track of cluster allocations
+
+Clusterlab also keeps track of the cluster allocations and gives each sample an unique ID. This may prove useful when scoring class discovery algorithms assignments.
+
+```{r,fig.width=6,fig.height=6}
+head(synthetic$identity_matrix)
+```
