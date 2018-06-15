@@ -1,9 +1,9 @@
-327f3e2f9455e12002cd59a723d86f3d *DESCRIPTION
+e8e79166b9461383778bec7a680f733c *DESCRIPTION
 00307346b89bd3ac3d480556dc8b6389 *NAMESPACE
 92886a3864240acdd085b7eab85dc3b9 *R/clusterlab.R
 ccbea5083ded9ad3c36eec9698fda678 *build/vignette.rds
-1efedd00f98149f0dce9fb2e2e04b0e0 *inst/doc/introduction.R
-b11b2868656ecfc6852695123a8c4dd6 *inst/doc/introduction.Rmd
-4e4b915cc559ef165337f0a340e5d2d0 *inst/doc/introduction.html
+69a9d15ffec9872a5ba4934cb2f9457f *inst/doc/introduction.R
+75ad0a130e35b5b9f9c2fcd7c36faef6 *inst/doc/introduction.Rmd
+fbd82ba5f922986c6c139e5eadeed5f6 *inst/doc/introduction.html
 7d792c68d603bc61fdb8bc69132f5535 *man/clusterlab.Rd
-b11b2868656ecfc6852695123a8c4dd6 *vignettes/introduction.Rmd
+75ad0a130e35b5b9f9c2fcd7c36faef6 *vignettes/introduction.Rmd

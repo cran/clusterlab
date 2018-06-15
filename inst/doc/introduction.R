@@ -4,17 +4,6 @@ knitr::opts_chunk$set(
   comment = "#>"
 )
 
-## ----results="asis",tidy=FALSE,eval=TRUE,echo=FALSE----------------------
-cat("[Simulating a single cluster](#test1)  \n")
-cat("[Simulating four clusters with equal variances](#test2)  \n") 
-cat("[Simulating four clusters with unequal variances](#test3)  \n")
-cat("[Simulating four clusters with one cluster pushed to the outside](#test4)  \n")
-cat("[Simulating four clusters with one small cluster](#test5)  \n")
-cat("[Simulated five clusters with one central cluster](#test6)  \n")
-cat("[Keeping track of cluster allocations](#test7)  \n")
-cat("[Generating more complex multi ringed structures](#test8)  \n")
-cat("[Afterthoughts](#test9)  \n")
-
 ## ----fig.width=6,fig.height=6--------------------------------------------
 library(clusterlab)
 synthetic <- clusterlab(centers=1,numbervec=100)
