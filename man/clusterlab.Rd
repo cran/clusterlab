@@ -5,7 +5,8 @@
 \title{clusterlab}
 \usage{
 clusterlab(centers = 1, r = 8, sdvec = NULL, alphas = NULL,
-  centralcluster = FALSE, numbervec = NULL, features = 500, seed = NULL)
+  centralcluster = FALSE, numbervec = NULL, features = 500, seed = NULL,
+  rings = NULL, ringalphas = NULL, ringthetas = NULL)
 }
 \arguments{
 \item{centers}{Numerical value: the number of clusters to simulate (N)}
@@ -23,6 +24,12 @@ clusterlab(centers = 1, r = 8, sdvec = NULL, alphas = NULL,
 \item{features}{Numerical value: the number of features for the data}
 
 \item{seed}{Numerical value: fixes the seed if you want to repeat results, set the seed to 123 for example here}
+
+\item{rings}{Numerical value: the number of concentric rings to generate (previous settings apply to all ring clusters)}
+
+\item{ringalphas}{Numerical vector: a vector of numbers to push each ring out by, must equal number of rings}
+
+\item{ringthetas}{Numerical vector: a vector of angles to rotate each ring by, must equal number of rings}
 }
 \value{
 A list, containing: 
@@ -30,7 +37,7 @@ A list, containing:
 2) cluster membership matrix
 }
 \description{
-This function runs clusterlab which is a simulator for gaussian clusters. It is simple yet highly flexible allowing
+This function runs clusterlab which is a simulator for Gaussian clusters. It is simple yet highly flexible allowing
 the user to choose parameters such as the variance and size of each cluster individually. Clusterlab allows 
 precise control over the distance between the N clusters.
 }
