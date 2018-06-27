@@ -2,4 +2,5 @@
 
 export(clusterlab)
 import(ggplot2)
-importFrom("stats", "prcomp", "rnorm")
+import(reshape)
+importFrom("stats", "prcomp", "rnorm", "dist")

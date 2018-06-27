@@ -15,6 +15,8 @@
 #' @param rings Numerical value: the number of concentric rings to generate (previous settings apply to all ring clusters)
 #' @param ringalphas Numerical vector: a vector of numbers to push each ring out by, must equal number of rings
 #' @param ringthetas Numerical vector: a vector of angles to rotate each ring by, must equal number of rings
+#' @param outliers Numerical value: the number of outliers to create
+#' @param outlierdist Numerical value: a distance value to move the outliers by
 #'
 #' @return A list, containing: 
 #' 1) the synthetic data
@@ -29,7 +31,7 @@
 
 clusterlab <- function(centers=1,r=8,sdvec=NULL,alphas=NULL,centralcluster=FALSE,
                        numbervec=NULL,features=500,seed=NULL,rings=NULL,ringalphas=NULL,
-                       ringthetas=NULL){
+                       ringthetas=NULL,outliers=NULL,outlierdist=NULL){
   
   message('running clusterlab...')
   
@@ -79,12 +81,16 @@ clusterlab <- function(centers=1,r=8,sdvec=NULL,alphas=NULL,centralcluster=FALSE
     message('ring method does not currently allow a central cluster to be generated, skipping')
   }
   if (is.null(rings) == FALSE & is.null(ringalphas) == TRUE){
-    message('ring alphas not set, setting...')
+    message('ring alphas not set, setting automatically...')
     ringalphas <- seq(2,rings*2,2)
   }
   if (is.null(rings) == FALSE & is.null(ringthetas) == TRUE){
-    message('ring thetas not set, setting...')
+    message('ring thetas not set, setting automatically...')
     ringthetas <- rep(0,rings)
+  }
+  if (is.null(outliers) == FALSE & is.null(outlierdist) == TRUE){
+    message('outlier degree not set, setting automatically...')
+    outlierdist <- 20
   }
   
   if (is.null(rings) == TRUE){ # doing without rings 
@@ -94,7 +100,7 @@ clusterlab <- function(centers=1,r=8,sdvec=NULL,alphas=NULL,centralcluster=FALSE
         matrix <- matrix(nrow=centers-1,ncol=2)
         n = centers-1
         i = 1
-        for (x in seq(0,n-1)){ # edited to N instead of N-1
+        for (x in seq(0,n-1)){ 
           x1 <- cos(2*pi/n*x)*r
           y1 <- sin(2*pi/n*x)*r
           matrix[i,1] <- x1
@@ -184,10 +190,6 @@ clusterlab <- function(centers=1,r=8,sdvec=NULL,alphas=NULL,centralcluster=FALSE
         }
         i = i + 1
       }
-      # find the centroid i.e. origin (approx 0,0)
-      #print(mean(matrix[,1]))
-      #print(mean(matrix[,2]))
-      
       # use scalar multiplication to pull the centers further apart by a parameter, alpha
       # need to create new vector of alphas because of the rings
       alphas <- alphalist[[ring]]
@@ -201,7 +203,7 @@ clusterlab <- function(centers=1,r=8,sdvec=NULL,alphas=NULL,centralcluster=FALSE
     matrix2 <- ringmatrix # over writing matrix2
     numbervec <- rep(numbervec,rings) # increase numbervec because of rings
     sdvec <- rep(sdvec,rings) # increase sdvec because of rings
-
+    
     # using rnorm create new points based on each center with SD=X,mean=0 (shifting point then saving)
     newsamplematrix <- matrix(ncol=2,nrow=0)
     identitymatrix <- matrix(ncol=2,nrow=sum(numbervec)) # hold the cluster identity (ground truth)
@@ -217,10 +219,39 @@ clusterlab <- function(centers=1,r=8,sdvec=NULL,alphas=NULL,centralcluster=FALSE
         c = c + 1
       }
     }
-    #print(nrow(identitymatrix))
-    #print(nrow(newsamplematrix)) # this is correct
     identitymatrix <- data.frame(identitymatrix)
     colnames(identitymatrix) <- c('sampleID','cluster')
+  }
+  
+  if (is.null(outliers) == FALSE){ 
+    message('we are generating outliers...')
+    # find the centroid and bind as the last column
+    res <- newsamplematrix
+    res2 <- t(res)
+    test <- cbind(res2,rowMeans(res2)) # find centroid
+    test <- data.frame(test)
+    colnames(test) <- identitymatrix$sampleID
+    # compute distance matrix
+    colnames(test)[ncol(test)] <- 'centroid'
+    testdf <- reshape::melt(as.matrix(dist(t(test))), varnames = c("row", "col"))
+    # get only the distances from the centroid
+    testdf <- subset(testdf,testdf$row=='centroid')
+    # convert to data frame and label
+    mydata <- as.data.frame(res)
+    mydata <- data.frame(t(mydata))
+    colnames(mydata) <- identitymatrix$sampleID
+    # make the outliers
+    d <- outlierdist
+    for (outlier in seq(1,outliers)){ # starting with the further away, push them out
+      faraway <- as.character(testdf$col[which(testdf$value==sort(testdf$value, decreasing=T)[outlier])]) 
+      theta <- sample(1:360, 1)
+      #theta <- 0
+      mydata[,faraway][1] = mydata[,faraway][1] + d * cos(theta)
+      mydata[,faraway][2]= mydata[,faraway][2] + d * sin(theta)
+    }
+    newsamplematrix <- t(mydata)
+  }else{
+    matrix2 <- newsamplematrix
   }
   
   # reverse PCA to generate N dimensional synthetic dataset
@@ -237,6 +268,7 @@ clusterlab <- function(centers=1,r=8,sdvec=NULL,alphas=NULL,centralcluster=FALSE
     answer <- a*xk + b*yk
     res[i,] <- answer
   }
+  
   mydata <- as.data.frame(res)
   pca1 = prcomp(mydata)
   scores <- data.frame(pca1$x) # PC score matrix
@@ -257,4 +289,3 @@ clusterlab <- function(centers=1,r=8,sdvec=NULL,alphas=NULL,centralcluster=FALSE
   newlist <- list('synthetic_data' = mydata, 'identity_matrix' = identitymatrix)
   return(newlist)
 }
-

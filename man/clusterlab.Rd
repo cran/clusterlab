@@ -6,7 +6,8 @@
 \usage{
 clusterlab(centers = 1, r = 8, sdvec = NULL, alphas = NULL,
   centralcluster = FALSE, numbervec = NULL, features = 500, seed = NULL,
-  rings = NULL, ringalphas = NULL, ringthetas = NULL)
+  rings = NULL, ringalphas = NULL, ringthetas = NULL, outliers = NULL,
+  outlierdist = NULL)
 }
 \arguments{
 \item{centers}{Numerical value: the number of clusters to simulate (N)}
@@ -30,6 +31,10 @@ clusterlab(centers = 1, r = 8, sdvec = NULL, alphas = NULL,
 \item{ringalphas}{Numerical vector: a vector of numbers to push each ring out by, must equal number of rings}
 
 \item{ringthetas}{Numerical vector: a vector of angles to rotate each ring by, must equal number of rings}
+
+\item{outliers}{Numerical value: the number of outliers to create}
+
+\item{outlierdist}{Numerical value: a distance value to move the outliers by}
 }
 \value{
 A list, containing: 

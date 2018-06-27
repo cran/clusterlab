@@ -16,7 +16,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-Clustering is a central task in big data analyses and clusters are often Gaussian or near Gaussian. However, a flexible Gaussian cluster simulation tool with precise control over the size, variance, and spacing of the clusters in NXN dimensional space does not exist. This is why we created clusterlab. The algorithm first creates X points equally spaced on the circumference of a circle in 2D space. These form the centers of each cluster to be simulated. Additional samples are added by adding Gaussian noise to each cluster center and concatenating the new sample co-ordinates. Then if the feature space is greater than 2D, the generated points are considered principal component scores and projected into N dimensional space using linear combinations using fixed eigenvectors. Clusterlab is highly customizable and well suited to testing class discovery tools across a range of fields.
+Clustering is a central task in big data analyses and clusters are often Gaussian or near Gaussian. However, a flexible Gaussian cluster simulation tool with precise control over the size, variance, and spacing of the clusters in NXN dimensional space does not exist. This is why we created clusterlab. The algorithm first creates X points equally spaced on the circumference of a circle in 2D space. These form the centers of each cluster to be simulated. Additional samples are added by adding Gaussian noise to each cluster center and concatenating the new sample co-ordinates. Then if the feature space is greater than 2D, the generated points are considered principal component scores and projected into N dimensional space using linear combinations using fixed eigenvectors. Through using vector rotations and scalar multiplication clusterlab can generate complex patterns of Gaussian clusters and outliers. Clusterlab is highly customizable and well suited to testing class discovery tools across a range of fields.
 
 ## Contents
 
@@ -25,10 +25,12 @@ Clustering is a central task in big data analyses and clusters are often Gaussia
 3. Simulating four clusters with unequal variances
 4. Simulating four clusters with one cluster pushed to the outside
 5. Simulating four clusters with one small cluster
-6. Simulated five clusters with one central cluster
-7. Keeping track of cluster allocations
-8. Generating more complex multi ringed structures
-9. Closing comments
+6. Simulating five clusters with one central cluster
+7. Simulating five clusters with ten outliers
+8. Generating more complex multi-ringed structures I
+9. Generating more complex multi-ringed structures II
+10. Keeping track of cluster allocations
+11. Closing comments
 
 ## Simulating a single cluster
 
@@ -39,7 +41,7 @@ library(clusterlab)
 synthetic <- clusterlab(centers=1,numbervec=100)
 ```
 
-## Simulating four clusters with equal variances {#test2}
+## Simulating four clusters with equal variances
 
 Next, we simulate a 4 cluster dataset with a radius of 8 for the circle on which the centers are placed. Then the standard deviations of the cluster are the same, 2.5. We set the alphas to 1, which is the value the clusters are pushed apart from one another. So there are two ways to seperate the clusters, either by the radius of the circle, or by the alpha parameter.
 
@@ -83,7 +85,7 @@ synthetic <- clusterlab(centers=4,r=8,sdvec=c(2.5,2.5,2.5,2.5),
                         numbervec=c(15,50,50,50))
 ```
 
-## Simulated five clusters with one central cluster
+## Simulating five clusters with one central cluster
 
 In this case we change the centralcluster parameter to TRUE, in order to make a central cluster as well as those placed on the circumference.
 
@@ -94,17 +96,32 @@ synthetic <- clusterlab(centers=5,r=8,sdvec=c(2.5,2.5,2.5,2.5,2.5),
                         numbervec=c(50,50,50,50,50))
 ```
 
-## Keeping track of cluster allocations
+## Simulated five clusters with one central cluster
 
-Clusterlab also keeps track of the cluster allocations and gives each sample an unique ID. This may prove useful when scoring class discovery algorithms assignments.
+We can add outliers and a distance transform them from their original coordinate. The angle chosen is random for every coordinate.
 
 ```{r,fig.width=6,fig.height=6}
-head(synthetic$identity_matrix)
+library(clusterlab)
+synthetic <- clusterlab(centers=5,r=7,sdvec=c(2,2,2,2,2),   
+                        alphas=c(2,2,2,2,2),centralcluster=FALSE,   
+                        numbervec=c(50,50,50,50), seed=123, outliers=10, outlierdist = 20)
 ```
 
-## Generating more complex multi ringed structures
+## Generating more complex multi-ringed structures I
 
-The package is also capable of generating concentric circles of clusters which allows more complex structures to be generated. The standard parameters we used previously apply to all clusters. Then to space the rings out we use the ringalphas parameter. Note, the stepwise number sequence specified below so they do not form on top of each other. The ringthetas parameter may be used to rotate each ring individually. 
+The package is also capable of generating concentric circles of clusters which allows more complex structures to be generated. The standard parameters we used previously per cluster apply to all clusters. To space the rings out we use the ringalphas parameter. Note, the stepwise number sequence specified below for ringalphas so the clusters do not form on top of each other. 
+
+```{r,fig.width=6,fig.height=6}
+library(clusterlab)
+synthetic <- clusterlab(centers=5,r=7,sdvec=c(6,6,6,6,6),   
+                        alphas=c(2,2,2,2,2),centralcluster=FALSE,   
+                        numbervec=c(50,50,50,50),rings=5,ringalphas=c(2,4,6,8,10,12),
+                        seed=123) # for a six cluster solution)
+```
+
+## Generating more complex multi-ringed structures II
+
+The ringthetas parameter may be used to rotate each ring individually. Through rotating the clusters complex patterns may be formed.
 
 ```{r,fig.width=6,fig.height=6}
 library(clusterlab)
@@ -114,6 +131,16 @@ synthetic <- clusterlab(centers=5,r=7,sdvec=c(6,6,6,6,6),
                         ringthetas = c(30,90,180,0,0,0), seed=123) # for a six cluster solution)
 ```
 
+## Keeping track of cluster allocations
+
+Clusterlab also keeps track of the cluster allocations and gives each sample an unique ID. This may prove useful when scoring class discovery algorithms assignments.
+
+```{r,fig.width=6,fig.height=6}
+head(synthetic$identity_matrix)
+```
+
 ## Closing comments
 
-We have seen how the clusterlab package may generate NXN Gaussian clusters in a flexible manner. For class discovery of these types of clusters we recommend clusterlab's sister package, M3C. This is available on the Bioconductor (https://bioconductor.org/packages/devel/bioc/html/M3C.html). Thanks for using clusterlab.
+We have seen how the clusterlab package may generate NXN Gaussian clusters in a flexible manner. For class discovery of these types of clusters we recommend clusterlab's sister package, M3C which was developed in parallel. M3C is available on the Bioconductor (https://bioconductor.org/packages/devel/bioc/html/M3C.html). 
+
+Thanks for using clusterlab.
