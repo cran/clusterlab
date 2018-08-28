@@ -7,7 +7,7 @@
 clusterlab(centers = 1, r = 8, sdvec = NULL, alphas = NULL,
   centralcluster = FALSE, numbervec = NULL, features = 500, seed = NULL,
   rings = NULL, ringalphas = NULL, ringthetas = NULL, outliers = NULL,
-  outlierdist = NULL)
+  outlierdist = NULL, mode = c("circle", "random"), minalloweddist = 0)
 }
 \arguments{
 \item{centers}{Numerical value: the number of clusters to simulate (N)}
@@ -35,6 +35,10 @@ clusterlab(centers = 1, r = 8, sdvec = NULL, alphas = NULL,
 \item{outliers}{Numerical value: the number of outliers to create}
 
 \item{outlierdist}{Numerical value: a distance value to move the outliers by}
+
+\item{mode}{Character string: whether to use the standard method (circle), or simple random placement (random)}
+
+\item{minalloweddist}{Numerical value: minimum distance between the randomised cluster centers, otherwise repeat randomisation}
 }
 \value{
 A list, containing: 
@@ -42,9 +46,11 @@ A list, containing:
 2) cluster membership matrix
 }
 \description{
-This function runs clusterlab which is a simulator for Gaussian clusters. It is simple yet highly flexible allowing
-the user to choose parameters such as the variance and size of each cluster individually. Clusterlab allows 
-precise control over the distance between the N clusters.
+This function runs clusterlab which is a simulator for Gaussian clusters. The default method positions cluster
+centers on the perimeter of a circle, before creating gaussian clusters around them and projecting the 2D
+co-ordinates into high dimensional feature space. This method allows control over the spacing, variance, and size
+of the clusters. Also included is a simple random cluster simulator where the spacing of the clusters cannot be 
+controlled precisely, but the other parameters can.
 }
 \examples{
 synthetic <- clusterlab(centers=4,r=8,sdvec=c(2.5,2.5,2.5,2.5),   

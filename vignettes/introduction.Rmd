@@ -4,7 +4,7 @@ author: "Christopher R John"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteIndexEntry{clusterlab}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -27,8 +27,8 @@ Clustering is a central task in big data analyses and clusters are often Gaussia
 5. Simulating four clusters with one small cluster
 6. Simulating five clusters with one central cluster
 7. Simulating five clusters with ten outliers
-8. Generating more complex multi-ringed structures I
-9. Generating more complex multi-ringed structures II
+8. Generating more complex multi-ringed structures
+9. Simulating randomly spaced Gaussian clusters
 10. Keeping track of cluster allocations
 11. Closing comments
 
@@ -107,19 +107,7 @@ synthetic <- clusterlab(centers=5,r=7,sdvec=c(2,2,2,2,2),
                         numbervec=c(50,50,50,50), seed=123, outliers=10, outlierdist = 20)
 ```
 
-## 8. Generating more complex multi-ringed structures I
-
-The package is also capable of generating concentric circles of clusters which allows more complex structures to be generated. The standard parameters we used previously per cluster apply to all clusters. To space the rings out we use the ringalphas parameter. Note, the stepwise number sequence specified below for ringalphas so the clusters do not form on top of each other. 
-
-```{r,fig.width=6,fig.height=6}
-library(clusterlab)
-synthetic <- clusterlab(centers=5,r=7,sdvec=c(6,6,6,6,6),   
-                        alphas=c(2,2,2,2,2),centralcluster=FALSE,   
-                        numbervec=c(50,50,50,50),rings=5,ringalphas=c(2,4,6,8,10,12),
-                        seed=123) # for a six cluster solution)
-```
-
-## 9. Generating more complex multi-ringed structures II
+## 8. Generating more complex multi-ringed structures
 
 The ringthetas parameter may be used to rotate each ring individually. Through rotating the clusters complex patterns may be formed.
 
@@ -129,6 +117,15 @@ synthetic <- clusterlab(centers=5,r=7,sdvec=c(6,6,6,6,6),
                         alphas=c(2,2,2,2,2),centralcluster=FALSE,   
                         numbervec=c(50,50,50,50),rings=5,ringalphas=c(2,4,6,8,10,12), 
                         ringthetas = c(30,90,180,0,0,0), seed=123) # for a six cluster solution)
+```
+
+## 9. Simulating randomly spaced Gaussian clusters
+
+A simpler option is just to simulate randomly spaced Gaussian clusters without controlled spacing. A minimum distance can be specified, however. This is very similar to the Scikit-learn make.blobs function.
+
+```{r,fig.width=6,fig.height=6}
+library(clusterlab)
+synthetic <- clusterlab(mode='random',centers=12)
 ```
 
 ## 10. Keeping track of cluster allocations
@@ -141,5 +138,8 @@ head(synthetic$identity_matrix)
 
 ## 11. Closing comments
 
-We have seen how the clusterlab package may generate NXN Gaussian clusters in a flexible manner. For class discovery of these types of clusters we recommend clusterlab's sister package, M3C which was developed in parallel. M3C is available on the Bioconductor (https://bioconductor.org/packages/devel/bioc/html/M3C.html). 
+We have seen how the clusterlab package may generate NXN Gaussian clusters in a flexible manner.
+
+For class discovery of these types of clusters we recommend clusterlab's sister package, M3C which was developed in parallel. M3C has been extensively tested on high dimensional Gaussian clusters. M3C is available on the Bioconductor (https://bioconductor.org/packages/devel/bioc/html/M3C.html). There is also the ClusterR package (https://CRAN.R-project.org/package=ClusterR).
+
 Thanks for using clusterlab.
