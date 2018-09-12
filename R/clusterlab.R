@@ -244,8 +244,8 @@ clusterlab <- function(centers=1,r=8,sdvec=NULL,alphas=NULL,centralcluster=FALSE
     
     if (is.null(outliers) == FALSE){ 
       message('we are generating outliers...')
-      # find the centroid and bind as the last column
-      res <- newsamplematrix
+      # find the centroid, as we only want to shift the outside points, and bind as the last column
+      res <- newsamplematrix # this holds all of the data points for all clusters
       res2 <- t(res)
       test <- cbind(res2,rowMeans(res2)) # find centroid
       test <- data.frame(test)
@@ -261,9 +261,9 @@ clusterlab <- function(centers=1,r=8,sdvec=NULL,alphas=NULL,centralcluster=FALSE
       colnames(mydata) <- identitymatrix$sampleID
       # make the outliers
       d <- outlierdist
-      for (outlier in seq(1,outliers)){ # starting with the further away, push them out
+      for (outlier in seq(1,outliers)){ # starting with the most far away, push them out
         faraway <- as.character(testdf$col[which(testdf$value==sort(testdf$value, decreasing=T)[outlier])]) 
-        theta <- sample(1:360, 1)
+        theta <- sample(1:360, 1) # random angle to rotate them by
         #theta <- 0
         mydata[,faraway][1] = mydata[,faraway][1] + d * cos(theta)
         mydata[,faraway][2]= mydata[,faraway][2] + d * sin(theta)

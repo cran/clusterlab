@@ -27,10 +27,13 @@ Clustering is a central task in big data analyses and clusters are often Gaussia
 5. Simulating four clusters with one small cluster
 6. Simulating five clusters with one central cluster
 7. Simulating five clusters with ten outliers
-8. Generating more complex multi-ringed structures
-9. Simulating randomly spaced Gaussian clusters
-10. Keeping track of cluster allocations
-11. Closing comments
+8. Simulating six clusters with different variances
+9. Simulating six clusters with different push apart degrees
+10. Simulating six clusters with different push apart degrees and variances
+11. Generating more complex multi-ringed structures
+12. Simulating randomly spaced Gaussian clusters
+13. Keeping track of cluster allocations
+14. Closing comments
 
 ## 1. Simulating a single cluster
 
@@ -107,7 +110,38 @@ synthetic <- clusterlab(centers=5,r=7,sdvec=c(2,2,2,2,2),
                         numbervec=c(50,50,50,50), seed=123, outliers=10, outlierdist = 20)
 ```
 
-## 8. Generating more complex multi-ringed structures
+## 8. Simulating six clusters with different variances
+
+Setting the variance here with the sdvec parameter.
+
+```{r,fig.width=6,fig.height=6}
+library(clusterlab)
+synthetic <- clusterlab(centers=7,r=9,sdvec=c(0.5,1,1.5,1.75,1.85,1.95,2.05),   
+                        numbervec=c(50,50,50,50,50,50,50), seed=123)
+```
+
+## 9. Simulating six clusters with different push apart degrees
+
+We set the push apart degree with the alphas parameter.
+
+```{r,fig.width=6,fig.height=6}
+library(clusterlab)
+synthetic <- clusterlab(centers=7,r=9,alphas=c(0.5,1,1.5,1.75,1.85,1.95,2.05),   
+                        numbervec=c(50,50,50,50,50,50,50), seed=123)
+```
+
+## 10. Simulating six clusters with different push apart degrees and variances
+
+Setting the push apart degree and variance of the clusters allows a more complex structure.
+
+```{r,fig.width=6,fig.height=6}
+library(clusterlab)
+synthetic <- clusterlab(centers=7,r=9,alphas=c(0.5,1,1.5,1.75,1.85,1.95,2.05), 
+                        sdvec=c(0.5,1,1.5,1.75,2,2.25,2.25),
+                        numbervec=c(50,50,50,50,50,50,50), seed=123)
+```
+
+## 11. Generating more complex multi-ringed structures
 
 The ringthetas parameter may be used to rotate each ring individually. Through rotating the clusters complex patterns may be formed.
 
@@ -119,7 +153,7 @@ synthetic <- clusterlab(centers=5,r=7,sdvec=c(6,6,6,6,6),
                         ringthetas = c(30,90,180,0,0,0), seed=123) # for a six cluster solution)
 ```
 
-## 9. Simulating randomly spaced Gaussian clusters
+## 12. Simulating randomly spaced Gaussian clusters
 
 A simpler option is just to simulate randomly spaced Gaussian clusters without controlled spacing. A minimum distance can be specified, however. This is very similar to the Scikit-learn make.blobs function.
 
@@ -128,7 +162,7 @@ library(clusterlab)
 synthetic <- clusterlab(mode='random',centers=12)
 ```
 
-## 10. Keeping track of cluster allocations
+## 13. Keeping track of cluster allocations
 
 Clusterlab also keeps track of the cluster allocations and gives each sample an unique ID. This may prove useful when scoring class discovery algorithms assignments.
 
@@ -136,7 +170,7 @@ Clusterlab also keeps track of the cluster allocations and gives each sample an 
 head(synthetic$identity_matrix)
 ```
 
-## 11. Closing comments
+## 14. Closing comments
 
 We have seen how the clusterlab package may generate NXN Gaussian clusters in a flexible manner.
 
