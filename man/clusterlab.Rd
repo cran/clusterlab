@@ -5,9 +5,10 @@
 \title{clusterlab}
 \usage{
 clusterlab(centers = 1, r = 8, sdvec = NULL, alphas = NULL,
-  centralcluster = FALSE, numbervec = NULL, features = 500, seed = NULL,
-  rings = NULL, ringalphas = NULL, ringthetas = NULL, outliers = NULL,
-  outlierdist = NULL, mode = c("circle", "random"), minalloweddist = 0)
+  centralcluster = FALSE, numbervec = NULL, features = 500,
+  seed = NULL, rings = NULL, ringalphas = NULL, ringthetas = NULL,
+  outliers = NULL, outlierdist = NULL, mode = c("circle", "random"),
+  minalloweddist = 0, pcafontsize = 18)
 }
 \arguments{
 \item{centers}{Numerical value: the number of clusters to simulate (N)}
@@ -39,6 +40,8 @@ clusterlab(centers = 1, r = 8, sdvec = NULL, alphas = NULL,
 \item{mode}{Character string: whether to use the standard method (circle), or simple random placement (random)}
 
 \item{minalloweddist}{Numerical value: minimum distance between the randomised cluster centers, otherwise repeat randomisation}
+
+\item{pcafontsize}{Numerical value: the font size of the pca}
 }
 \value{
 A list, containing: 

@@ -21,6 +21,7 @@
 #' @param outlierdist Numerical value: a distance value to move the outliers by
 #' @param mode Character string: whether to use the standard method (circle), or simple random placement (random)
 #' @param minalloweddist Numerical value: minimum distance between the randomised cluster centers, otherwise repeat randomisation
+#' @param pcafontsize Numerical value: the font size of the pca
 #'
 #' @return A list, containing: 
 #' 1) the synthetic data
@@ -36,7 +37,7 @@
 clusterlab <- function(centers=1,r=8,sdvec=NULL,alphas=NULL,centralcluster=FALSE,
                        numbervec=NULL,features=500,seed=NULL,rings=NULL,ringalphas=NULL,
                        ringthetas=NULL,outliers=NULL,outlierdist=NULL,mode=c('circle','random'),
-                       minalloweddist=0){
+                       minalloweddist=0,pcafontsize=18){
   
   mode <- match.arg(mode)
   message('***clusterlab***')
@@ -295,10 +296,10 @@ clusterlab <- function(centers=1,r=8,sdvec=NULL,alphas=NULL,centralcluster=FALSE
     p <- ggplot(data = scores, aes_string(x = 'PC1', y = 'PC2', colour = identitymatrix$cluster) ) + geom_point(size=3) +
       theme_bw() + 
       theme(legend.position = "none", panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
-            axis.text.y = element_text(size = 18, colour = 'black'),
-            axis.text.x = element_text(size = 18, colour = 'black'),
-            axis.title.x = element_text(size = 18),
-            axis.title.y = element_text(size = 18))
+            axis.text.y = element_text(size = pcafontsize, colour = 'black'),
+            axis.text.x = element_text(size = pcafontsize, colour = 'black'),
+            axis.title.x = element_text(size = pcafontsize),
+            axis.title.y = element_text(size = pcafontsize))
     print(p)
     mydata <- data.frame(t(mydata))
     colnames(mydata) <- identitymatrix$sampleID
@@ -369,10 +370,10 @@ clusterlab <- function(centers=1,r=8,sdvec=NULL,alphas=NULL,centralcluster=FALSE
     p <- ggplot(data = scores, aes_string(x = 'PC1', y = 'PC2', colour = identitymatrix$cluster) ) + geom_point(size=3) +
       theme_bw() + 
       theme(legend.position = "none", panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
-            axis.text.y = element_text(size = 18, colour = 'black'),
-            axis.text.x = element_text(size = 18, colour = 'black'),
-            axis.title.x = element_text(size = 18),
-            axis.title.y = element_text(size = 18))
+            axis.text.y = element_text(size = pcafontsize, colour = 'black'),
+            axis.text.x = element_text(size = pcafontsize, colour = 'black'),
+            axis.title.x = element_text(size = pcafontsize),
+            axis.title.y = element_text(size = pcafontsize))
     print(p)
     mydata <- data.frame(t(mydata))
     
