@@ -8,7 +8,7 @@ clusterlab(centers = 1, r = 8, sdvec = NULL, alphas = NULL,
   centralcluster = FALSE, numbervec = NULL, features = 500,
   seed = NULL, rings = NULL, ringalphas = NULL, ringthetas = NULL,
   outliers = NULL, outlierdist = NULL, mode = c("circle", "random"),
-  minalloweddist = 0, pcafontsize = 18)
+  minalloweddist = 0, pcafontsize = 18, showplots = TRUE)
 }
 \arguments{
 \item{centers}{Numerical value: the number of clusters to simulate (N)}
@@ -42,6 +42,8 @@ clusterlab(centers = 1, r = 8, sdvec = NULL, alphas = NULL,
 \item{minalloweddist}{Numerical value: minimum distance between the randomised cluster centers, otherwise repeat randomisation}
 
 \item{pcafontsize}{Numerical value: the font size of the pca}
+
+\item{showplots}{Logical flag: whether to remove the plots}
 }
 \value{
 A list, containing: 
