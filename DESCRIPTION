@@ -1,7 +1,7 @@
 Package: clusterlab
 Title: Flexible Gaussian Cluster Simulator
-Version: 0.0.2.7
-Date: 2019-08-02
+Version: 0.0.2.8
+Date: 2019-09-05
 Author: Christopher R John
 Maintainer: Christopher R John <chris.r.john86@gmail.com>
 Depends: R (>= 3.4.0)
@@ -14,6 +14,6 @@ Suggests: knitr
 VignetteBuilder: knitr
 RoxygenNote: 6.0.1
 NeedsCompilation: no
-Packaged: 2019-08-02 12:59:33 UTC; christopher
+Packaged: 2019-09-05 07:33:13 UTC; christopher
 Repository: CRAN
-Date/Publication: 2019-08-02 13:30:02 UTC
+Date/Publication: 2019-09-05 08:20:02 UTC

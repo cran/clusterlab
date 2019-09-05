@@ -20,7 +20,6 @@
 #' @param outliers Numerical value: the number of outliers to create
 #' @param outlierdist Numerical value: a distance value to move the outliers by
 #' @param mode Character string: whether to use the standard method (circle), or simple random placement (random)
-#' @param minalloweddist Numerical value: minimum distance between the randomised cluster centers, otherwise repeat randomisation
 #' @param pcafontsize Numerical value: the font size of the pca
 #' @param showplots Logical flag: whether to remove the plots
 #'
@@ -38,7 +37,7 @@
 clusterlab <- function(centers=1,r=8,sdvec=NULL,alphas=NULL,centralcluster=FALSE,
                        numbervec=NULL,features=500,seed=NULL,rings=NULL,ringalphas=NULL,
                        ringthetas=NULL,outliers=NULL,outlierdist=NULL,mode=c('circle','random'),
-                       minalloweddist=0,pcafontsize=18,showplots=TRUE){
+                       pcafontsize=18,showplots=TRUE){
   
   mode <- match.arg(mode)
   message('***clusterlab***')
@@ -317,7 +316,7 @@ clusterlab <- function(centers=1,r=8,sdvec=NULL,alphas=NULL,centralcluster=FALSE
     
   }else if (mode == 'random'){ # this is for the simple random mode
     
-    matrix <- matrix(ncol=10,nrow=0)
+    matrix <- matrix(ncol=features,nrow=0)
     identitymatrix <- matrix(ncol=2,nrow=sum(numbervec))
     # make random centers
     c = 1
@@ -330,26 +329,7 @@ clusterlab <- function(centers=1,r=8,sdvec=NULL,alphas=NULL,centralcluster=FALSE
     }
     row.names(matrix) <- paste('c',seq(1,centers),'s1',sep='') # clusteri, sample1
     d <- matrix
-    stored <- dist(d)
-    suppressWarnings(mindist <- min(dist(d)))
-    
-    xi <- 1
-    while (mindist < minalloweddist){
-      message('randomising centers again as value/s are lower than the set minimum distance...')
-      matrix <- matrix(ncol=features,nrow=0)
-      for (sample in seq(1,centers)){
-        a <- rnorm(n=features) # scale up factor
-        matrix <- rbind(matrix,a)
-      }
-      row.names(matrix) <- paste('c',seq(1,centers),'s1',sep='') # clusteri, sample1
-      d <- matrix
-      mindist <- min(dist(d))
-      xi = xi + 1
-      if (xi == 100){
-        stop('minimum distance too high for data')
-      }
-    }
-    stored <- dist(d)
+
     # make Gaussian clusters
     i = 1
     for (center in seq(1,centers)){ # for each cluster in my sequence of clusters
